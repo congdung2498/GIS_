@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="ISO-8859-1">
+        <link rel="stylesheet"
+              href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css" />
+        <script src="https://openlayers.org/en/v4.6.5/build/ol.js" type="text/javascript"></script>
+         <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <link href="/css/map.css" rel="stylesheet">
+        <title>PostGis</title>
+    </head>
+    <body onload="initialize_map()">
+        <table>
+            <tr>
+                <td>
+                    <div id="map" class="map"></div>
+                </td>
+                <td>
+                    <button>Button</button>
+                </td>
+                <td>
+                    <div><a th:href="@{/test}">Test </a></div>
+                </td>
+                <td>
+                    <div><a th:href="@{/map}">Map </a></div>
+                </td>
+                <td>
+                     <div id="info">123</div>
+                </td>
+            </tr>
+        </table>
+        <script type="text/javascript" src="/js/map.js"></script>	
+    </body>
+</html>
