@@ -1,15 +1,15 @@
 
 var format = 'image/png';
 var map;
-var minX = 102.144584655762;
-var minY = 8.38135528564453;
-var maxX = 109.469177246094;
-var maxY = 23.3926944732666;
+var minX = 106.4004974365229970;
+var minY = 20.1180610656738992;
+var maxX = 107.7464218139650001;
+var maxY = 21.0204582214356996;
 var cenX = (minX + maxX) / 2;
 var cenY = (minY + maxY) / 2;
 var mapLat = cenY;
 var mapLng = cenX;
-var mapDefaultZoom = 6;
+var mapDefaultZoom = 9;
 
 function initialize_map() {
     //*
@@ -41,7 +41,7 @@ function initialize_map() {
     var adm1styleFunction = function (feature) {
         return adm1Style[feature.getGeometry().getType()];
     };
-    var layer_adm1 = new ol.layer.Image({
+    var layer_huyen = new ol.layer.Image({
         source: new ol.source.ImageWMS({
             ratio: 1,
             url: 'http://localhost:8080/geoserver/wspaceTest/wms?',
@@ -49,11 +49,11 @@ function initialize_map() {
                 'FORMAT': format,
                 'VERSION': '1.1.1',
                 STYLES: '',
-                LAYERS: 'gadm36_vnm_1',
+                LAYERS: 'huyen',
             }
         })
     });
-    var layer_adm2 = new ol.layer.Image({
+    var layer_xa = new ol.layer.Image({
         source: new ol.source.ImageWMS({
             ratio: 2,
             url: 'http://localhost:8080/geoserver/wspaceTest/wms?',
@@ -61,7 +61,7 @@ function initialize_map() {
                 'FORMAT': format,
                 'VERSION': '1.1.1',
                 STYLES: '',
-                LAYERS: 'gadm36_vnm_2',
+                LAYERS: 'xa',
             }
         })
     });
@@ -72,7 +72,7 @@ function initialize_map() {
     });
     map = new ol.Map({
         target: "map",
-        layers: [layerBG, layer_adm1],
+        layers: [layerBG, layer_huyen],
         //layers: [layerCMR_adm1],
         view: viewMap
     });
@@ -110,14 +110,14 @@ function initialize_map() {
     map.addLayer(vectorLayer);
 
     map.getView().on('change:resolution', function (e) {
-        if (map.getView().getZoom() > 7) {
+        if (map.getView().getZoom() > 10) {
             map.getLayers().clear();
             map.addLayer(layerBG);
-            map.addLayer(layer_adm2);
+            map.addLayer(layer_xa);
         } else {
             map.getLayers().clear();
             map.addLayer(layerBG);
-            map.addLayer(layer_adm1);
+            map.addLayer(layer_huyen);
 
         }
         map.addLayer(vectorLayer);
@@ -173,12 +173,12 @@ function initialize_map() {
         var myPoint = 'POINT(' + lon + ' ' + lat + ')';
         $.ajax({
             type: "GET",
-            url: "http://localhost:8089/getDistrict",
+            url: "http://localhost:8089/getXa",
             dataType: 'json',
             //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
             data: {point: myPoint},
             success: function (result, status, erro) {
-                $("#info").html(result.name + " - " + result.province);
+                $("#info").html(result.name + " - " + result.district);
                 highLightObj(result);
 //                displayObjInfo(result, evt.coordinate);
             },
