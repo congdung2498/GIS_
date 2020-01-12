@@ -12,8 +12,11 @@ package com.example.demo.model;
 public class Village {
     private String name;
     private String District;
-    private String geometry;
-
+    private String geometry;//vị trí
+    private Double acreage;//diện tích
+    private Integer populartion;//dân số
+    private Boolean isStandardCommune = false;//đạt chuẩn là xã
+    
     public String getName() {
         return name;
     }
@@ -37,5 +40,29 @@ public class Village {
     public void setGeometry(String geometry) {
         this.geometry = geometry;
     }
+
+	public Double getAcreage() {
+		return acreage;
+	}
+
+	public void setAcreage(Double acreage) {
+		this.acreage = acreage;
+	}
+
+	public Integer getPopulartion() {
+		return populartion;
+	}
+
+	public void setPopulartion(Integer populartion) {
+		this.populartion = populartion;
+	}
+
+	public Boolean getIsStandardCommune() {
+		return isStandardCommune;
+	}
+
+	public void setIsStandardCommune(Boolean isStandardCommune) {
+		this.isStandardCommune = isStandardCommune;
+	}
     
 }
