@@ -2,8 +2,8 @@ body{
 	background-color: white;
 }
  .map, .righ-panel {
-    height: 98vh;
-    width: 80vw;
+    height: 96vh;
+    width: 60vw;
     float: left;
 }
 .map {
