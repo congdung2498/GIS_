@@ -26,7 +26,7 @@ public class NativeSql {
         Map map = new HashMap();
         try {
             tx = session.beginTransaction();
-            String sql = "SELECT name_3, name_2, ST_AsGeoJson(geom) as geo  from xa where ST_Within('"+point+"', ST_AsText(geom)) ";
+            String sql = "SELECT name_3, name_2, name_1, dientich, danso, ST_AsGeoJson(geom) as geo  from xa where ST_Within('"+point+"', ST_AsText(geom)) ";
             SQLQuery query = session.createSQLQuery(sql);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             rows = query.list();
@@ -36,9 +36,11 @@ public class NativeSql {
                 village.setName((String)map.get("name_3"));
                 village.setDistrict((String)map.get("name_2"));
                 village.setGeometry((String)map.get("geo"));
+                village.setAcreage((Double)map.get("dientich"));
+                village.setPopulartion((Integer)map.get("danso"));
                 
                 data.add(village);
-                System.out.println(map.get("name_3") + " Huyen " + map.get("name_2") );
+                System.out.println(map.get("name_2") + "Thành Phố " + map.get("name_1") + "Dien tich" + map.get("dientich") + "Dân số" + map.get("danso"));
             }
             tx.commit();
             return data.get(0);
