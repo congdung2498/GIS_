@@ -10,12 +10,30 @@ package com.example.demo.model;
  * @author ABC
  */
 public class Village {
+    private String gid;
     private String name;
     private String District;
     private String geometry;//vị trí
     private Double acreage;//diện tích
     private Integer populartion;//dân số
     private Boolean isStandardCommune = false;//đạt chuẩn là xã
+    private Boolean isVillage = true;
+    public String getGid() {
+        return gid;
+    }
+
+    public void setGid(String gid) {
+        this.gid = gid;
+    }
+
+    public Boolean getIsVillage() {
+        return isVillage;
+    }
+
+    public void setIsVillage(Boolean isVillage) {
+        this.isVillage = isVillage;
+    }
+    
     
     public String getName() {
         return name;
@@ -64,5 +82,6 @@ public class Village {
 	public void setIsStandardCommune(Boolean isStandardCommune) {
 		this.isStandardCommune = isStandardCommune;
 	}
+        
     
 }

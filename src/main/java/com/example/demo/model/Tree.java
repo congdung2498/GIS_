@@ -15,7 +15,17 @@ public class Tree {
     String id;
     String text;
     List<Tree> children;
+    Boolean isVillage;
 
+    public Boolean getIsVillage() {
+        return isVillage;
+    }
+
+    public void setIsVillage(Boolean isVillage) {
+        this.isVillage = isVillage;
+    }
+    
+    
     public String getId() {
         return id;
     }

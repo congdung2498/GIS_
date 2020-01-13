@@ -208,7 +208,29 @@ $.ajax({
         $('#evts')
                 .on("changed.jstree", function (e, data) {
                     if (data.selected.length) {
-                        alert('The selected node is: ' + data.instance.get_node(data.selected[0]).text);
+                        var geoid = data.instance.get_node(data.selected[0]).id;
+                        $.ajax({
+                            type: "GET",
+                            url: "http://localhost:8089/getDistrictOrVillageByid",
+                            dataType: 'json',
+                            //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
+                            data: {gid: geoid},
+                            success: function (result, status, erro) {
+                                if(result!=null){
+                                    if(result.isVillage != null && result.isVillage){
+                                         $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
+                                    }
+                                    else if(result.isVillage != null && !result.isVillage){
+                                        $("#info").html("Huyện: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
+                                    }
+                                   
+                                }    
+                            },
+                            error: function (req, status, error) {
+                                
+                            }
+                        });
+
                     }
                 })
                 .jstree({
@@ -219,6 +241,5 @@ $.ajax({
                 });
     },
     error: function (req, status, error) {
-        alert(req + " " + status + " " + error);
     }
 });

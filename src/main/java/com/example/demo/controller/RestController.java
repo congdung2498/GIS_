@@ -24,6 +24,12 @@ public class RestController {
         NativeSql na = new NativeSql();
         return na.listVillage(point);
     }
+    @GetMapping(path = "/getDistrictOrVillageByid")
+    public Object getDistrictOrVillageByid(@RequestParam(value="gid")String gid) {
+        NativeSql na = new NativeSql();
+        return na.getDistrictOrVillageByid(gid);
+    }
+    
     @GetMapping(path = "/getTree")
     public List<Tree> getTree() {
         NativeSql na = new NativeSql();
