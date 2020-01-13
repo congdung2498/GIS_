@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.NativeSql;
 import com.example.demo.model.District;
+import com.example.demo.model.Tree;
 import com.example.demo.model.Village;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,11 @@ public class RestController {
     public Village loadXa(@RequestParam(value="point")String point) {
         NativeSql na = new NativeSql();
         return na.listVillage(point);
+    }
+    @GetMapping(path = "/getTree")
+    public List<Tree> getTree() {
+        NativeSql na = new NativeSql();
+        return na.getTree();
     }
     
 }

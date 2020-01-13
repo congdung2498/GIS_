@@ -41,7 +41,7 @@ function initialize_map() {
     var adm1styleFunction = function (feature) {
         return adm1Style[feature.getGeometry().getType()];
     };
-     var layer_huyen = new ol.layer.Image({
+    var layer_huyen = new ol.layer.Image({
         source: new ol.source.ImageWMS({
             ratio: 1,
             url: 'http://localhost:8080/geoserver/wspaceTest/wms?',
@@ -178,7 +178,7 @@ function initialize_map() {
             //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
             data: {point: myPoint},
             success: function (result, status, erro) {
-                $("#info").html("Xã: "+ result.name +  "("+ "Diện tích:"+ result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người"+ ")");
+                $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
                 highLightObj(result);
 //                displayObjInfo(result, evt.coordinate);
             },
@@ -189,4 +189,36 @@ function initialize_map() {
         //*/
     });
 
+
+
 }
+var treeData;
+$.ajax({
+    type: "GET",
+    url: "http://localhost:8089/getTree",
+    dataType: 'json',
+    success: function (result, status, erro) {
+        treeData = result;
+        //                displayObjInfo(result, evt.coordinate);
+        $('#evts_button').on("click", function () {
+            var instance = $('#evts').jstree(true);
+            instance.deselect_all();
+            instance.select_node('1');
+        });
+        $('#evts')
+                .on("changed.jstree", function (e, data) {
+                    if (data.selected.length) {
+                        alert('The selected node is: ' + data.instance.get_node(data.selected[0]).text);
+                    }
+                })
+                .jstree({
+                    'core': {
+                        'multiple': false,
+                        'data': treeData
+                    }
+                });
+    },
+    error: function (req, status, error) {
+        alert(req + " " + status + " " + error);
+    }
+});
