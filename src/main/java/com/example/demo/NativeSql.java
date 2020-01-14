@@ -65,16 +65,18 @@ public class NativeSql {
         List<Object> rows = new ArrayList();
         Map map = new HashMap();
         String geo ="";
+        String name3 ="";
         try {
             tx = session.beginTransaction();
-            String sql = "SELECT ST_AsText(geom) as geo from xa where ST_Within('" + point + "', ST_AsText(geom)) ";
+            String sql = "SELECT name_3,ST_AsText(geom) as geo from xa where ST_Within('" + point + "', ST_AsText(geom)) ";
             SQLQuery query = session.createSQLQuery(sql);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             rows = query.list();
             for (Object row : rows) {
                 map = (Map) row;
+                name3 =	(String) map.get("name_3");
                 geo = (String) map.get("geo");
-                System.out.println(geo);
+                System.out.println(name3);
             }
             tx.commit();
             if(geo != null && geo.length()>0){
@@ -115,7 +117,7 @@ public class NativeSql {
                 village.setPopulartion((Integer) map.get("danso"));
 
                 data.add(village);
-                System.out.println(map.get("name_2") + "Thành Phố " + map.get("name_1") + "Dien tich" + map.get("dientich") + "Dân số" + map.get("danso"));
+                System.out.println(map.get("name_3") + "Thành Phố " + map.get("name_1") + "Dien tich" + map.get("dientich") + "Dân số" + map.get("danso"));
             }
             tx.commit();
             return data;

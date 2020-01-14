@@ -19,7 +19,7 @@ function initialize_map() {
     var layer_huyen = new ol.layer.Image({
         source: new ol.source.ImageWMS({
             ratio: 1,
-            url: 'http://localhost:8080/geoserver/wspaceTest/wms?',
+            url: 'http://localhost:8080/geoserver/wspace/wms?',
             params: {
                 'FORMAT': format,
                 'VERSION': '1.1.1',
@@ -31,7 +31,7 @@ function initialize_map() {
     var layer_xa = new ol.layer.Image({
         source: new ol.source.ImageWMS({
             ratio: 2,
-            url: 'http://localhost:8080/geoserver/wspaceTest/wms?',
+            url: 'http://localhost:8080/geoserver/wspace/wms?',
             params: {
                 'FORMAT': format,
                 'VERSION': '1.1.1',
@@ -143,6 +143,8 @@ function initialize_map() {
         highLightGeoJsonObj(objJson);
         setStyleHighLight(result.name);
     }
+    
+        
     map.on('singleclick', function (evt) {
         //alert("coordinate org: " + evt.coordinate);
         //var myPoint = 'POINT(12,5)';
@@ -150,16 +152,25 @@ function initialize_map() {
         var lon = lonlat[0];
         var lat = lonlat[1];
         var myPoint = 'POINT(' + lon + ' ' + lat + ')';
+                
         $.ajax({
             type: "GET",
-            url: "http://localhost:8089/getXa",
+            url: "http://localhost:8089/getXaTouch",
             dataType: 'json',
             //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
             data: {point: myPoint},
             success: function (result, status, erro) {
-                $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
-                highLightObj(result);
-
+            	$('#info').empty();
+            	$.each(result, function(i, item){
+            		highLightObj(result[i]);
+            		var record = 
+                        "<tr><td>" + item.name + "</td>" +
+                        		"<td>" + item.acreage + "</td>" +
+                        		"<td>" + item.populartion + "</td>" +
+                        		"</tr>" 
+                        $("#info").append(record);
+            	});
+            	
             },
             error: function (req, status, error) {
                 alert(req + " " + status + " " + error);

@@ -1,0 +1,8 @@
+﻿- Import dữ liệu của các tỉnh(gadm26_VNM_1) và huyện (gadm26_VNM_2) vào pgadmin
+- Tạo thêm cột "dientich" kiểu integer trong bảng (gadm26_VNM_2) và chạy lệnh 
+	update gadm26_VNM_2 set dientich = ST_Area(geom, false)/1000000
+- Vào geoserver tạo 2 layer tương ứng
+- import 2 file style styleDistrict.sld và styleTinh.sld vào geoserver tương ứng cho 2 layer. 
+	( xem hướng dẫn ở 2p10s  https://www.youtube.com/watch?v=R58EggReZtU )
+- Config db ở 2 file src/main/resource/application.properties và hibernate.cfg.xml
+- buil maven, chạy localhost:8089
