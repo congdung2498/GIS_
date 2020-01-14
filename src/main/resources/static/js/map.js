@@ -16,31 +16,6 @@ function initialize_map() {
     layerBG = new ol.layer.Tile({
         source: new ol.source.OSM({})
     });
-    //*/
-    var adm1Style = {
-        'MultiPolygon': new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: 'orange'
-            }),
-            stroke: new ol.style.Stroke({
-                color: 'yellow',
-                width: 2
-            }),
-            text: new ol.style.Text({
-                font: '12px Calibri,sans-serif',
-//                fill: new ol.style.Fill({color: '#000'}),
-//                stroke: new ol.style.Stroke({
-//                    color: '#fff', width: 2
-//                }),
-                // get the text from the feature - `this` is ol.Feature
-                // and show only under certain resolution
-                text: 'acs'
-            })
-        })
-    };
-    var adm1styleFunction = function (feature) {
-        return adm1Style[feature.getGeometry().getType()];
-    };
     var layer_huyen = new ol.layer.Image({
         source: new ol.source.ImageWMS({
             ratio: 1,
@@ -78,34 +53,37 @@ function initialize_map() {
     });
     //map.getView().fit(bounds, map.getSize());
 
-    var styles = {
-        'MultiPolygon': new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: 'orange'
-            }),
-            stroke: new ol.style.Stroke({
-                color: 'yellow',
-                width: 2
-            }),
-            text: new ol.style.Text({
-                font: '12px Calibri,sans-serif',
+    var setStyleHighLight = function (name) {
+        var styles = {
+            'MultiPolygon': new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'orange'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'yellow',
+                    width: 2
+                }),
+                text: new ol.style.Text({
+                    font: '15px Calibri,sans-serif',
 //                fill: new ol.style.Fill({color: '#000'}),
 //                stroke: new ol.style.Stroke({
 //                    color: '#fff', width: 2
 //                }),
-                // get the text from the feature - `this` is ol.Feature
-                // and show only under certain resolution
-                text: 'acs'
+                    // get the text from the feature - `this` is ol.Feature
+                    // and show only under certain resolution
+                    text: name
+                })
             })
-        })
-    };
-    var styleFunction = function (feature) {
-        return styles[feature.getGeometry().getType()];
-    };
+        };
+        var styleFunction = function (feature) {
+            return styles[feature.getGeometry().getType()];
+        };
+        vectorLayer.setStyle(styleFunction);
+    }
+
+
 
     var vectorLayer = new ol.layer.Vector({
-        //source: vectorSource,
-        style: styleFunction
     });
     map.addLayer(vectorLayer);
 
@@ -163,6 +141,7 @@ function initialize_map() {
         //alert(JSON.stringify(objJson));
         //drawGeoJsonObj(objJson);
         highLightGeoJsonObj(objJson);
+        setStyleHighLight(result.name);
     }
     map.on('singleclick', function (evt) {
         //alert("coordinate org: " + evt.coordinate);
@@ -173,14 +152,14 @@ function initialize_map() {
         var myPoint = 'POINT(' + lon + ' ' + lat + ')';
         $.ajax({
             type: "GET",
-            url: "http://localhost:8089/getXaTouch",
+            url: "http://localhost:8089/getXa",
             dataType: 'json',
             //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
             data: {point: myPoint},
             success: function (result, status, erro) {
                 $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
                 highLightObj(result);
-//                displayObjInfo(result, evt.coordinate);
+
             },
             error: function (req, status, error) {
                 alert(req + " " + status + " " + error);
@@ -190,56 +169,79 @@ function initialize_map() {
     });
 
 
+    var treeData;
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8089/getTree",
+        dataType: 'json',
+        success: function (result, status, erro) {
+            treeData = result;
+            //                displayObjInfo(result, evt.coordinate);
+            $('#evts_button').on("click", function () {
+                var instance = $('#evts').jstree(true);
+                instance.deselect_all();
+                instance.select_node('1');
+            });
+            $('#evts')
+                    .on("changed.jstree", function (e, data) {
+                        if (data.selected.length) {
+                            var geoid = data.instance.get_node(data.selected[0]).id;
+                            $.ajax({
+                                type: "GET",
+                                url: "http://localhost:8089/getDistrictOrVillageByid",
+                                dataType: 'json',
+                                //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
+                                data: {gid: geoid},
+                                success: function (result, status, erro) {
+                                    if (result != null) {
+                                        if (result.isVillage != null && result.isVillage) {
+                                            $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
+                                            viewMap.setZoom(12);
+                                            highLightObj(result);
+                                            var minX = result.xMin;
+                                            var minY = result.yMin;
+                                            var maxX = result.xMax;
+                                            var maxY = result.yMax;
+                                            var cenX = (minX + maxX) / 2;
+                                            var cenY = (minY + maxY) / 2;
+                                            var mapLat = cenY;
+                                            var mapLng = cenX;
+                                            viewMap.setCenter(ol.proj.fromLonLat([mapLng, mapLat]));
+
+
+                                        } else if (result.isVillage != null && !result.isVillage) {
+                                            $("#info").html("Huyện: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
+                                            viewMap.setZoom(9);
+                                            var minX = result.xMin;
+                                            var minY = result.yMin;
+                                            var maxX = result.xMax;
+                                            var maxY = result.yMax;
+                                            var cenX = (minX + maxX) / 2;
+                                            var cenY = (minY + maxY) / 2;
+                                            var mapLat = cenY;
+                                            var mapLng = cenX;
+                                            viewMap.setCenter(ol.proj.fromLonLat([mapLng, mapLat]));
+
+                                        }
+
+                                    }
+                                },
+                                error: function (req, status, error) {
+
+                                }
+                            });
+
+                        }
+                    })
+                    .jstree({
+                        'core': {
+                            'multiple': false,
+                            'data': treeData
+                        }
+                    });
+        },
+        error: function (req, status, error) {
+        }
+    });
 
 }
-var treeData;
-$.ajax({
-    type: "GET",
-    url: "http://localhost:8089/getTree",
-    dataType: 'json',
-    success: function (result, status, erro) {
-        treeData = result;
-        //                displayObjInfo(result, evt.coordinate);
-        $('#evts_button').on("click", function () {
-            var instance = $('#evts').jstree(true);
-            instance.deselect_all();
-            instance.select_node('1');
-        });
-        $('#evts')
-                .on("changed.jstree", function (e, data) {
-                    if (data.selected.length) {
-                        var geoid = data.instance.get_node(data.selected[0]).id;
-                        $.ajax({
-                            type: "GET",
-                            url: "http://localhost:8089/getDistrictOrVillageByid",
-                            dataType: 'json',
-                            //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
-                            data: {gid: geoid},
-                            success: function (result, status, erro) {
-                                if(result!=null){
-                                    if(result.isVillage != null && result.isVillage){
-                                         $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
-                                    }
-                                    else if(result.isVillage != null && !result.isVillage){
-                                        $("#info").html("Huyện: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
-                                    }
-                                   
-                                }    
-                            },
-                            error: function (req, status, error) {
-                                
-                            }
-                        });
-
-                    }
-                })
-                .jstree({
-                    'core': {
-                        'multiple': false,
-                        'data': treeData
-                    }
-                });
-    },
-    error: function (req, status, error) {
-    }
-});

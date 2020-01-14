@@ -18,6 +18,44 @@ public class Village {
     private Integer populartion;//dân số
     private Boolean isStandardCommune = false;//đạt chuẩn là xã
     private Boolean isVillage = true;
+    private Double xMax;
+    private Double xMin;
+    private Double yMax;
+    private Double yMin;
+
+    public Double getxMax() {
+        return xMax;
+    }
+
+    public void setxMax(Double xMax) {
+        this.xMax = xMax;
+    }
+
+    public Double getxMin() {
+        return xMin;
+    }
+
+    public void setxMin(Double xMin) {
+        this.xMin = xMin;
+    }
+
+    public Double getyMax() {
+        return yMax;
+    }
+
+    public void setyMax(Double yMax) {
+        this.yMax = yMax;
+    }
+
+    public Double getyMin() {
+        return yMin;
+    }
+
+    public void setyMin(Double yMin) {
+        this.yMin = yMin;
+    }
+    
+    
     public String getGid() {
         return gid;
     }

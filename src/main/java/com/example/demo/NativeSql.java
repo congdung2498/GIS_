@@ -232,19 +232,25 @@ public class NativeSql {
         Map map = new HashMap();
         try {
             tx = session.beginTransaction();
-            String sql = "SELECT gid_3,name_3, name_2, name_1, dientich, danso, ST_AsGeoJson(geom) as geo  from xa where gid_3 like '" + geoId + "'";
+            String sql = "SELECT gid_3,name_3, name_2, name_1, dientich, danso, ST_AsGeoJson(geom) as geo, "
+                    + "ST_XMax(geom) as xMax,ST_XMin(geom) as xMin, ST_YMax(geom) as yMax,ST_YMin(geom) as yMin "
+                    + " from xa where gid_3 like '" + geoId + "'";
             SQLQuery query = session.createSQLQuery(sql);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             rows = query.list();
             for (Object row : rows) {
                 map = (Map) row;
                 Village village = new Village();
-                village.setGid((String) map.get("gid_3"));
+                village.setGid((String) map.get("gid_3")); 
                 village.setName((String) map.get("name_3"));
                 village.setDistrict((String) map.get("name_2"));
                 village.setGeometry((String) map.get("geo"));
                 village.setAcreage((Double) map.get("dientich"));
                 village.setPopulartion((Integer) map.get("danso"));
+                village.setxMax((Double) map.get("xmax"));
+                village.setxMin((Double) map.get("xmin"));
+                village.setyMax((Double) map.get("ymax"));
+                village.setyMin((Double) map.get("ymin"));
                 data.add(village);
             }
             tx.commit();
@@ -273,7 +279,8 @@ public class NativeSql {
         try {
             tx = session.beginTransaction();
             String sql = "SELECT  huyen.gid_2,huyen.name_2, huyen.dientich, ST_AsGeoJson(huyen.geom),"
-                    + " (select sum(danso) from xa where xa.gid_2 = huyen.gid_2) as tongdan from huyen "
+                    + " (select sum(danso) from xa where xa.gid_2 = huyen.gid_2) as tongdan ,"
+                    + "ST_XMax(geom) as xMax,ST_XMin(geom) as xMin, ST_YMax(geom) as yMax,ST_YMin(geom) as yMin  from huyen "
                     + "where huyen.gid_2 like '" + geoId + "'";
             SQLQuery query = session.createSQLQuery(sql);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
@@ -286,6 +293,10 @@ public class NativeSql {
                 district.setAcreage((Integer) map.get("dientich"));
                 district.setPopulartion((BigInteger) map.get("tongdan"));
                 district.setGeometry((String) map.get("geo"));
+                district.setxMax((Double) map.get("xmax"));
+                district.setxMin((Double) map.get("xmin"));
+                district.setyMax((Double) map.get("ymax"));
+                district.setyMin((Double) map.get("ymin"));
                 data.add(district);
             }
             tx.commit();

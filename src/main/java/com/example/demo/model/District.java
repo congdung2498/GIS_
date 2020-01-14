@@ -21,7 +21,43 @@ public class District {
     private BigInteger populartion;//dân số
     private Integer numberInValidVillage; //so luong xa ko đạt chuẩn 
     private Boolean isVillage = false;
+    private Double xMax;
+    private Double xMin;
+    private Double yMax;
+    private Double yMin;
 
+    public Double getxMax() {
+        return xMax;
+    }
+
+    public void setxMax(Double xMax) {
+        this.xMax = xMax;
+    }
+
+    public Double getxMin() {
+        return xMin;
+    }
+
+    public void setxMin(Double xMin) {
+        this.xMin = xMin;
+    }
+
+    public Double getyMax() {
+        return yMax;
+    }
+
+    public void setyMax(Double yMax) {
+        this.yMax = yMax;
+    }
+
+    public Double getyMin() {
+        return yMin;
+    }
+
+    public void setyMin(Double yMin) {
+        this.yMin = yMin;
+    }
+    
     public Boolean getIsVillage() {
         return isVillage;
     }
