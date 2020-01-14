@@ -36,4 +36,9 @@ public class RestController {
         return na.getTree();
     }
     
+    @GetMapping(path = "/getXaTouch")
+    public List<Village> loadXaTouch(@RequestParam(value="point")String point) {
+        NativeSql na = new NativeSql();
+        return na.listVillageGeo(point);
+    }
 }

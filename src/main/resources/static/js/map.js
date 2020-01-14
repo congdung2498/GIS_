@@ -173,7 +173,7 @@ function initialize_map() {
         var myPoint = 'POINT(' + lon + ' ' + lat + ')';
         $.ajax({
             type: "GET",
-            url: "http://localhost:8089/getXa",
+            url: "http://localhost:8089/getXaTouch",
             dataType: 'json',
             //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
             data: {point: myPoint},
