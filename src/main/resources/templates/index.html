@@ -17,12 +17,39 @@
         <div class="row" style="padding-top:10px;padding-left:10px " >
             <div class="col-md-9" >
                 <div id="map"></div>
-                <div id="info"></div>
+                <div id="title"></div>
+                <div id="round"></div>
+                <div class="row">
+                	<div class="col-md-5">
+                	<table>
+					    <thead>
+					      <tr>
+					        <th>Xã</th>
+					        <th>Diện tích(km2)</th>
+					        <th>Dân số(người)</th>
+					      </tr>
+					    </thead>
+					    <tbody id="info">
+      
+					    </tbody>
+					  </table>
+                </div>
+                <div class="col-md-5">
+                	<div id="enough"></div>
+                </div>
+                </div>
             </div>
             <div class = "col-md-3">
+            	<div><h4>Quy mô dân số và diện tích</h4></div>
+            	<div>
+            		<ul>
+            			<li><img th:src="@{/image/a_blue.jpg}" height="20" width="20"> Đủ tiêu chuẩn</li>
+            			<li><img th:src="@{/image/a_green.jpg}" height="20" width="20"> Chưa đủ tiêu chuẩn trên 50%</li>
+            			<li><img th:src="@{/image/a_red.jpg}" height="20" width="20"> Chưa đủ tiêu chuẩn dưới 50%</li>
+            		</ul>
+            	</div>
+            	<div><h4>Danh sách huyện, xã</h4></div>
                 <div class="demo" id="evts" ></div>
-                
-
             </div>
         </div>
 

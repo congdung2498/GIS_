@@ -160,17 +160,36 @@ function initialize_map() {
             //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
             data: {point: myPoint},
             success: function (result, status, erro) {
+            	console.log(result);
             	$('#info').empty();
-            	$.each(result, function(i, item){
+            	$("#enough").empty();
+            	//$('#round').empty();
+            	var round = "Các xã tiếp giáp với : "+ result[result.length-1].name + "( Diện tích : " + result[result.length-1].acreage + " km2 - Dân số : " + result[result.length-1].populartion+" người)";
+            	$("#round").html(round);
+            	for(var i=0;i<result.length-1;i++){
+            		highLightObj(result[i+1]);
+            		var record = 
+                        "<tr><td>" + result[i].name + "</td>" +
+                        		"<td>" + result[i].acreage + "</td>" +
+                        		"<td>" + result[i].populartion + "</td>" +
+                        		"</tr>"
+                        $("#info").append(record);
+            		
+            		/*if((result[result.length-1].acreage + result[i].acreage) >= 30 && (result[result.length-1].populartion + result[i].populartion) >=8000 or result[i].populartion < 30 or result[i].acreage > 8000){
+            			$("#enough").append(result[i].name + " - ");
+            		}*/
+            	}
+            	
+            	
+            	/*$.each(result, function(i, item){
             		highLightObj(result[i]);
             		var record = 
                         "<tr><td>" + item.name + "</td>" +
                         		"<td>" + item.acreage + "</td>" +
                         		"<td>" + item.populartion + "</td>" +
-                        		"</tr>" 
+                        		"</tr>"
                         $("#info").append(record);
-            	});
-            	
+            	});*/
             },
             error: function (req, status, error) {
                 alert(req + " " + status + " " + error);
@@ -204,9 +223,16 @@ function initialize_map() {
                                 //data: {functionname: 'reponseGeoToAjax', paPoint: myPoint},
                                 data: {gid: geoid},
                                 success: function (result, status, erro) {
+                                	$('#round').empty();
                                     if (result != null) {
                                         if (result.isVillage != null && result.isVillage) {
-                                            $("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
+                                        	var record = 
+                                                "<tr><td>" + result.name + "</td>" +
+                                        		"<td>" + result.acreage + "</td>" +
+                                        		"<td>" + result.populartion + "</td>" +
+                                        		"</tr>"
+                                        		$("#info").html(record);
+                                            //$("#info").html("Xã: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
                                             viewMap.setZoom(12);
                                             highLightObj(result);
                                             var minX = result.xMin;
@@ -221,7 +247,13 @@ function initialize_map() {
 
 
                                         } else if (result.isVillage != null && !result.isVillage) {
-                                            $("#info").html("Huyện: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
+                                        	var record = 
+                                                "<tr><td>" + result.name + "</td>" +
+                                                		"<td>" + result.acreage + "</td>" +
+                                                		"<td>" + result.populartion + "</td>" +
+                                                		"</tr>"
+                                                $("#info").html(record);
+                                            //$("#info").html("Huyện: " + result.name + "(" + "Diện tích:" + result.acreage + " km2" + "--" + "Dân số:" + result.populartion + " người" + ")");
                                             viewMap.setZoom(9);
                                             var minX = result.xMin;
                                             var minY = result.yMin;

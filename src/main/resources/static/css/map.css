@@ -9,3 +9,19 @@ body{
 .map {
     border: 1px solid #000;
 }
+
+#info{
+	margin: 20px;
+}
+table{
+	margin-top: 10px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 3px;
+}
+
+ul li{
+	list-style-type: none;
+}
